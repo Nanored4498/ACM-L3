@@ -1,33 +1,43 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
+
+vector<int> v[301];
+int col[301];
+
+bool color(int s, int c) {
+	col[s] = c;
+	for(int x : v[s])
+		if(col[x] == c || (col[x] == 0 && color(x, 3-c))) return true;
+	return false;
+}
 
 int main() {
     cout.tie(nullptr);
     ios::sync_with_stdio(false);
 
-	int V;
-	int nv[301];
+	int V = 0;
 	int i, a, b;
-	bool no;
+	bool bo;
 
 	while(true) {
+		for(i = 1; i <= V; i++) col[i] = 0, v[i].clear();
 		cin >> V;
 		if(V == 0) return 0;
-		no = false;
+		bo = false;
 		while(true) {
 			cin >> a >> b;
 			if(a == 0) break;
-			if(nv[a] > 0 && nv[b] > 0) {no = true; cout << a << b << " ?\n";}
-			nv[a] ++;
-			nv[b] ++;
+			v[a].push_back(b);
+			v[b].push_back(a);
 		}
-		cout << no << " !\n";
-		for(i = 1; i <= V; i++) {
-			if(nv[i] == 2 || nv[i] > 3) no = true;
-			nv[i] = 0;
-		}
-		if(no) cout << "NO\n";
+		for(i = 1; i <= V; i++)
+			if(col[i] == 0 && color(i, 1)) {
+				bo = true;
+				break;
+			}
+		if(bo) cout << "NO\n";
 		else cout << "YES\n";
 	}
 }
