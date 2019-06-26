@@ -31,7 +31,7 @@ int main() {
 					for(int c12 = 0; c12 <= ma3; c12 ++) {
 						int ssc = sc + c12;
 						if(ssc == c1 || ssc == c2) {
-							E[n][d][0][0][0] = 0;
+							E[n][d][c1][c2][c12] = 0;
 							continue;
 						}
 						double self = 0;
