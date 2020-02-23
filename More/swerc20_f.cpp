@@ -13,7 +13,7 @@ int main() {
 	int N, P;
 	cin >> N;
 	long long res = 0;
-	for(int k = 0; k < P; k++) {
+	for(int k = 0; k < N; k++) {
 		cin >> P;
 		vector<Point> ps;
 		LL x, y;
@@ -21,14 +21,14 @@ int main() {
 			cin >> x >> y;
 			ps.emplace_back(x, y);
 		}
-		long long ar = 0;
+		LL ar = 0;
 		for(int i = 0; i < P; i++) {
 			Point a = ps[i], b = ps[(i+1)%P];
 			ar += a.first * b.second - a.second * b.first;
 		}
 		res += abs(ar);
 	}
-	res /= 2;
+	res >>= 1;
 	cout << res << "\n";
 
 	return 0;

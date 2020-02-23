@@ -5,7 +5,7 @@
 using namespace std;
 
 #define LL long long
-#define INF 3000000000
+#define INF 3000000000000
 
 struct Edge {
 	int to, ind;
