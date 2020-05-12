@@ -42,7 +42,6 @@ bool add(int j) {
 	return false;
 }
 
-
 void augment() {
 	int i, j;
 	for(i = 0; i < N; ++i) S[i] = false;

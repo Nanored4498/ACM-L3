@@ -21,9 +21,8 @@ struct Edge {
 		}
 		return available;
 	}
-	void set_available(int s, bool a) {
+	void set_available(bool a) {
 		available = a;
-		state = G2[to][sym].state = s;
 		G2[to][sym].available = !available;
 	}
 };
@@ -40,7 +39,7 @@ bool augment_path(int i) {
 	if(i == 1) return true;
 	seen[i] = i0;
 	for(Edge &no : G2[i]) if(no.is_available(di0) && augment_path(no.to)) {
-		no.set_available(di0, false);
+		no.set_available(false);
 		return true;
 	}
 	return false;
@@ -69,7 +68,6 @@ int main() {
 		priority_queue<pair<int, int>> Q;
 		Q.emplace(0, 1);
 		dis[1] = 0;
-		int c_left = c;
 		while(!Q.empty()) {
 			int d = -Q.top().first, i = Q.top().second;
 			Q.pop();
