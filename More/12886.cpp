@@ -9,42 +9,62 @@ int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(nullptr);
 
-	int hp, wp, hm, wm;
-	string p[MAX_hw], mi;
-	vector<int> KMP[MAX_hw], KMP2(MAX_hw+1), d(MAX_hw);
-	for(int i = 0; i < MAX_hw; ++i) KMP[i].resize(MAX_hw+1);
+	uint hp, wp, hm, wm;
+	string s;
+	vector<uint> pc[MAX_hw], mc[MAX_hw+1];
+	for(uint j = 0; j < MAX_hw; ++j) {
+		pc[j].resize(MAX_hw/31+1);
+		mc[j+1].resize(MAX_hw);
+	}
+	mc[0].assign(MAX_hw, 0);
+	int KMP[MAX_hw+1];
 	while(cin >> hp) {
 		cin >> wp >> hm >> wm;
-		int res = 0;
-		KMP2[0] = -1;
-		for(int i = 0; i < hp; ++i) {
-			cin >> p[i];
-			KMP[i][0] = -1;
-			for(int j = 1; j <= wp; ++j) {
-				KMP[i][j] = KMP[i][j-1];
-				while(KMP[i][j] != -1 && p[i][KMP[i][j]] != p[i][j-1]) KMP[i][j] = KMP[i][KMP[i][j]];
-				++ KMP[i][j];
-			}
-			KMP2[i+1] = KMP2[i];
-			while(KMP2[i+1] != -1 && p[KMP2[i+1]] != p[i]) KMP2[i+1] = KMP2[KMP2[i+1]];
-			++ KMP2[i+1];
+		uint block = min(hp, 31u);
+		uint hpb = (hp-1)/block;
+		uint lshift = ((hpb+1)*block-hp) % block;
+		for(uint j = 0; j < wp; ++j) for(uint i = 0; i <= hpb; ++i) pc[j][i] = 0;
+		for(int i = hp-1; i >= 0; --i) {
+			cin >> s;
+			uint k = i / block;
+			uint add = 1u << (block-1u - (i%block));
+			for(uint j = 0; j < wp; ++j) if(s[j] == 'x') pc[j][k] += add;
 		}
-		for(int i = 0; i < wm; ++i) d[i] = 0;
-		for(int i = 0; i < hm; ++i) {
-			cin >> mi;
-			int k=0, l=0;
-			// while(k < wm) {
-			// 	while(l != -1 && p[j][l] != mi[k]) l = KMP[j][l];
-			// 	++k; ++l;
-			// 	if(l == wp) {
-			// 		if(j == 0 || last[j-1][k-l] == i-1) {
-			// 			last[j][k-l] = i;
-			// 			if(j == hp-1) ++res;
-			// 			else if(to_find2.empty() || to_find2.back() != j+1) to_find2.push_back(j+1);
-			// 		}
-			// 		l = KMP[j][l];
-			// 	}
-			// }
+		KMP[0] = -1;
+		for(uint j = 1; j <= wp; ++j) {
+			KMP[j] = KMP[j-1];
+			while(KMP[j] != -1) {
+				bool equal = true;
+				for(uint i = 0; i <= hpb; ++i) if(pc[KMP[j]][i] != pc[j-1][i]) { equal = false; break; }
+				if(equal) break;
+				KMP[j] = KMP[KMP[j]];
+			}
+			++ KMP[j];
+		}
+		uint res = 0;
+		uint add = 1 << (block-1);
+		for(uint i = 1; i < hp; ++i) {
+			cin >> s;
+			for(uint j = 0; j < wm; ++j) {
+				mc[i][j] = mc[i-1][j] >> 1;
+				if(s[j] == 'x') mc[i][j] += add;
+			}
+		}
+		for(uint i = hp; i <= hm; ++i) {
+			cin >> s;
+			int k=0;
+			for(uint j = 0; j < wm; ++j) {
+				mc[i][j] = mc[i-1][j] >> 1;
+				if(s[j] == 'x') mc[i][j] += add;
+				while(k != -1) {
+					bool equal = true;
+					for(uint l = 0; l < hpb; ++l) if(mc[i-l*block][j] != pc[k][l]) { equal = false; break; }
+					if(equal && (mc[i-hpb*block][j] >> lshift) == (pc[k][hpb] >> lshift)) break;
+					k = KMP[k];
+				}
+				++ k;
+				if(k == wp) { ++ res; k = KMP[k]; }
+			}
 		}
 		cout << res << "\n";
 	}
