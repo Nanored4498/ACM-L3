@@ -19,7 +19,7 @@ int main() {
 			r = max(s-m, r);
 			m = min(m, s);
 		}
-		if(r < 0) cout << "Loose.\n";
-		else cout << "Winning with " << r << ".\n";
+		if(r < 0) cout << "Beurk.\n";
+		else cout << "Plaisir " << r << ".\n";
 	}
 }

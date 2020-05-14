@@ -19,4 +19,4 @@ for t in range(N):
 		r += c
 	else:
 		r += c*n
-	print("Case {}: {}".format(t+1, r))
+	print("Cas {}: {}".format(t+1, r))

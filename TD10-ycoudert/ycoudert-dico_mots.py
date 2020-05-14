@@ -2,9 +2,10 @@ d = {} #dico des voisins
 s = input()
 while s != "*":
 	p = []
+	s = s.replace(' ', '')
 	n = len(s)
 	if n > 4:
-		s = input()	
+		s = input()
 		continue
 	for a in d:
 		if len(a) == n:
@@ -17,14 +18,13 @@ while s != "*":
 					else:
 						c = True
 						break
-			if c:
-				continue
+			if c: continue
 			p.append(a)
 			d[a].append(s)
 	d[s] = p
 	s = input()
 
-v = set([]) #vues
+v = set() #vues
 
 #parcours en largeur
 def f(l, g):
