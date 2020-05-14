@@ -7,20 +7,36 @@ int main() {
 	cout.tie(nullptr);
 
 	int a[100];
-	int d[100][100];
 	int n;
 	while(cin >> n) {
-		for(int i = 0; i < n; ++i) cin >> a[i];
+		int s = 0;
 		for(int i = 0; i < n; ++i) {
-			d[i][i] = 0;
-			int f = 1;
-			while(2*f <= a[i]) { ++d[i][i]; f *= d[i][i]+1; }
+			cin >> a[i];
+			s += a[i];
 		}
-		for(int s = 1; s < n; ++s) {
-			for(int i = 0; i < n; ++i) {
-
+		if(s % 2 == 1) {
+			cout << "no quotation\n";
+			continue;
+		}
+		int k = 0;
+		while((k+2)*(k+1) <= s) ++k;
+		while(k > 0) {
+			int i = 0, j = n-1;
+			int ai = a[0], aj = a[n-1];
+			bool ok = true;
+			for(int l = k; l > 1; --l) {
+				while(ai == 0) ai = a[++i];
+				if(l > ai) { ok = false; break; }
+				ai -= l;
+				while(aj == 0) { aj = a[--j]; }
+				if(l > aj) { ok = false; break; }
+				aj -= l;
 			}
+			if(ok) break;
+			--k;
 		}
+		if(k == 1 && s > 2) cout << "no quotation\n";
+		else cout << k << "\n";
 	}
 
 	return 0;
