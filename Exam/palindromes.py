@@ -1,5 +1,3 @@
-#python me crache dessus pour le input() : je ne comprends pas !!!!!
-
 n = int(input())
 for _ in range(n):
 	s = input()
