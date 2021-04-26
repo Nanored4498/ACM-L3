@@ -7,7 +7,6 @@ for t in range(1, T+1):
 		u //= 10
 	l = list(reversed(l))
 	for _ in range(n):
-		# print(l)
 		l2 = []
 		i, j = 0, 1
 		while i < len(l):
